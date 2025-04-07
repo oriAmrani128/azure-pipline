@@ -1,0 +1,17 @@
+trigger:
+  - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  - task: UseDotNet@2
+    inputs:
+      packageType: 'sdk'
+      version: '6.0.x'
+
+  - script: dotnet build
+    displayName: 'Build project'
+
+  - script: dotnet test
+    displayName: 'Run tests'
