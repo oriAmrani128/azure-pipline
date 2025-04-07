@@ -1,0 +1,15 @@
+/home/ori/azure-devops/HelloWorldApp/bin/Debug/net7.0/HelloWorldApp
+/home/ori/azure-devops/HelloWorldApp/bin/Debug/net7.0/HelloWorldApp.deps.json
+/home/ori/azure-devops/HelloWorldApp/bin/Debug/net7.0/HelloWorldApp.runtimeconfig.json
+/home/ori/azure-devops/HelloWorldApp/bin/Debug/net7.0/HelloWorldApp.dll
+/home/ori/azure-devops/HelloWorldApp/bin/Debug/net7.0/HelloWorldApp.pdb
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.csproj.AssemblyReference.cache
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.GeneratedMSBuildEditorConfig.editorconfig
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.AssemblyInfoInputs.cache
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.AssemblyInfo.cs
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.csproj.CoreCompileInputs.cache
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.dll
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/refint/HelloWorldApp.dll
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.pdb
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/HelloWorldApp.genruntimeconfig.cache
+/home/ori/azure-devops/HelloWorldApp/obj/Debug/net7.0/ref/HelloWorldApp.dll
