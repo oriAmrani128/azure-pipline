@@ -4,14 +4,26 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
+variables:
+  buildConfiguration: 'Release'
+  version: '1.0.$(Build.BuildId)'
+
 steps:
   - task: UseDotNet@2
     inputs:
       packageType: 'sdk'
-      version: '6.0.x'
+      version: '7.0.x'
 
-  - script: dotnet build
-    displayName: 'Build project'
+  - script: dotnet build --configuration $(buildConfiguration)
+    displayName: 'Build the project'
 
-  - script: dotnet test
-    displayName: 'Run tests'
+  - script: dotnet run
+    displayName: 'Run the project'
+
+  - script: dotnet pack --configuration $(buildConfiguration) -p:PackageVersion=$(version) -o $(Build.ArtifactStagingDirectory)
+    displayName: 'Pack the project'
+
+  - task: PublishBuildArtifacts@1
+    inputs:
+      pathToPublish: '$(Build.ArtifactStagingDirectory)'
+      artifactName: 'HelloWorldApp_$(version)'
