@@ -9,21 +9,27 @@ variables:
   version: '1.0.$(Build.BuildId)'
 
 steps:
-  - task: UseDotNet@2
-    inputs:
-      packageType: 'sdk'
-      version: '7.0.x'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '7.0.x'
 
-  - script: dotnet build --configuration $(buildConfiguration)
-    displayName: 'Build the project'
+- script: 'echo "Current version: $(version)"'
+  displayName: 'Print version to console'
 
-  - script: dotnet run
-    displayName: 'Run the project'
+- script: echo "##vso[build.updatebuildnumber]$(version)"
+  displayName: 'Set build number'
 
-  - script: dotnet pack --configuration $(buildConfiguration) -p:PackageVersion=$(version) -o $(Build.ArtifactStagingDirectory)
-    displayName: 'Pack the project'
+- script: dotnet build --configuration $(buildConfiguration)
+  displayName: 'Build the project'
 
-  - task: PublishBuildArtifacts@1
-    inputs:
-      pathToPublish: '$(Build.ArtifactStagingDirectory)'
-      artifactName: 'HelloWorldApp_$(version)'
+- script: dotnet run
+  displayName: 'Run the project'
+
+- script: dotnet pack --configuration $(buildConfiguration) -p:PackageVersion=$(version) -o $(Build.ArtifactStagingDirectory)
+  displayName: 'Pack the project'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathToPublish: '$(Build.ArtifactStagingDirectory)'
+    artifactName: 'HelloWorldApp_$(version)'
