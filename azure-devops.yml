@@ -1,5 +1,6 @@
 trigger:
   - main
+  - develop
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -20,16 +21,37 @@ steps:
 - script: echo "##vso[build.updatebuildnumber]$(version)"
   displayName: 'Set build number'
 
+
+- task: SonarQubePrepare@5
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'develop'))
+  inputs:
+    SonarQube: 'helloworld'            
+    scannerMode: 'MSBuild'
+    projectKey: 'helloworld'
+    projectName: 'HelloWorldApp'
+
+
 - script: dotnet build --configuration $(buildConfiguration)
   displayName: 'Build the project'
+
+- task: SonarQubeAnalyze@5
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'develop'))
 
 - script: dotnet run
   displayName: 'Run the project'
 
+
 - script: dotnet pack --configuration $(buildConfiguration) -p:PackageVersion=$(version) -o $(Build.ArtifactStagingDirectory)
   displayName: 'Pack the project'
+
 
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: 'HelloWorldApp_$(version)'
+
+
+- task: SonarQubePublish@5
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'develop'))
+  inputs:
+    pollingTimeoutSec: '300'
