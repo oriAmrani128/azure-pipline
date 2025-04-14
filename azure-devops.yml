@@ -8,8 +8,12 @@ pool:
 variables:
   buildConfiguration: 'Release'
   version: '1.0.$(Build.BuildId)'
+  dockerRegistryServiceConnection: 'your-dockerhub-service-connection' # שנה בהתאם לשם שלך
+  imageRepository: 'yourdockerhubuser/weatherapp'
+  tag: '$(Build.BuildId)'
 
 steps:
+### ✅ .NET Build
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
@@ -30,37 +34,31 @@ steps:
 - script: echo "##vso[task.setvariable variable=branchName]$(Build.SourceBranchName)"
   displayName: 'Set branch name variable'
 
-
-- task: Docker@2
-  displayName: 'Build Docker Image'
-  inputs:
-    command: build
-    Dockerfile: '**/Dockerfile'
-    tags: |
-      $(DOCKER_USERNAME)/hello-world-dotnet:$(branchName)_$(version)
-
-- task: Docker@2
-  displayName: 'Login to Docker Hub'
-  inputs:
-    command: login
-    containerRegistry: '' # אם אין לך Service Connection מוגדר, השאר ריק
-    username: '$(DOCKER_USERNAME)'
-    password: '$(DOCKER_PASSWORD)'
-
-### 🟠 Docker Push
-- task: Docker@2
-  displayName: 'Push Docker Image'
-  inputs:
-    command: push
-    tags: |
-      $(DOCKER_USERNAME)/hello-world-dotnet:$(branchName)_$(version)
-
-### 📦 NuGet Package
+### 📦 Pack NuGet
 - script: dotnet pack --configuration $(buildConfiguration) -p:PackageVersion=$(version) -o $(Build.ArtifactStagingDirectory)
   displayName: 'Pack the project'
 
-### 📤 Publish as artifact
 - task: PublishBuildArtifacts@1
   inputs:
     pathToPublish: '$(Build.ArtifactStagingDirectory)'
     artifactName: '$(branchName)_$(version)'
+
+
+### 🔐 Download kubeconfig (from Secure Files)
+- task: DownloadSecureFile@1
+  name: downloadKubeconfig
+  inputs:
+    secureFile: kubeconfig
+
+### 🧠 Set kubeconfig for kubectl
+- script: |
+    mkdir -p ~/.kube
+    cp "$(downloadKubeconfig.secureFilePath)" ~/.kube/config
+    echo "Kubeconfig set"
+  displayName: 'Set up kubeconfig'
+
+### 🚀 Deploy to Rancher
+- script: |
+    kubectl apply -f weatherapp-deployment.yaml
+    kubectl apply -f weatherapp-service.yaml
+  displayName: 'Deploy to Rancher'
