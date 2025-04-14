@@ -59,6 +59,6 @@ steps:
 
 ### 🚀 Deploy to Rancher
 - script: |
-    kubectl apply -f weatherapp-deployment.yaml
-    kubectl apply -f weatherapp-service.yaml
+    kubectl apply -f deployment.yaml
+    kubectl apply -f service.yaml
   displayName: 'Deploy to Rancher'
