@@ -48,7 +48,7 @@ steps:
 - task: DownloadSecureFile@1
   name: downloadKubeconfig
   inputs:
-    secureFile: kubeconfig
+    secureFile: local.yaml
 
 ### 🧠 Set kubeconfig for kubectl
 - script: |
